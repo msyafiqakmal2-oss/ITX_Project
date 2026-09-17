@@ -1,0 +1,207 @@
+<?php $__env->startSection('title', 'Katalog Barang - Klik UEC MART'); ?>
+
+<?php $__env->startSection('content'); ?>
+
+<!-- Promo Banner Carousel Placeholder -->
+<div class="bg-gradient-to-r from-brand-blue to-brand-navy rounded-2xl p-6 text-white mb-8 shadow-md relative overflow-hidden">
+    <div class="relative z-10 max-w-xl">
+        <span class="bg-brand-yellow text-brand-navy font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wide">Promo Hemat UEC</span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold mt-2 mb-1">Belanja Kebutuhan Harian Murah & Lengkap</h1>
+        <p class="text-sm text-blue-100 mb-4">Dapatkan penawaran harga terbaik untuk stok barang pokok harian Anda.</p>
+        <button onclick="openModal('createModal')" class="bg-brand-yellow text-brand-navy hover:bg-yellow-400 font-bold px-4 py-2 rounded-lg text-sm shadow transition">
+            + Tambah Stok Barang
+        </button>
+    </div>
+    <div class="absolute -right-6 -bottom-10 opacity-10 text-white text-[160px] font-black pointer-events-none">
+        UEC
+    </div>
+</div>
+
+<!-- Category Filters -->
+<div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+        <i class="fa-solid fa-fire text-brand-red mr-2"></i> Daftar Produk Tersedia
+    </h2>
+    <span class="text-xs text-gray-500 font-medium">Menampilkan <?php echo e($barangs->count()); ?> barang</span>
+</div>
+
+<!-- Product Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    <?php $__empty_1 = true; $__currentLoopData = $barangs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition flex flex-col justify-between overflow-hidden relative group">
+            
+            <!-- Floating Action Buttons -->
+            <div class="absolute top-2 right-2 z-10 flex flex-col space-y-1 opacity-0 group-hover:opacity-100 transition">
+                <button onclick="editBarang(<?php echo e(json_encode($item)); ?>)" class="w-7 h-7 bg-white/90 hover:bg-brand-blue hover:text-white text-gray-600 rounded-full flex items-center justify-center shadow text-xs transition" title="Edit Barang">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+                
+                <form action="<?php echo e(route('barang.destroy', $item->id)); ?>" method="POST" onsubmit="return confirm('Yakin ingin menghapus barang ini?')">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
+                    <button type="submit" class="w-7 h-7 bg-white/90 hover:bg-brand-red hover:text-white text-gray-600 rounded-full flex items-center justify-center shadow text-xs transition" title="Hapus Barang">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div>
+                <!-- Product Image Header Placeholder -->
+                <div class="h-36 bg-gray-50 flex items-center justify-center p-3 relative border-b border-gray-100">
+                    <i class="fa-solid fa-box text-5xl text-gray-300"></i>
+
+                    <!-- Strip Label Kuning (Indomaret Style) -->
+                    <div class="absolute bottom-0 left-0 right-0 bg-brand-yellow text-brand-navy text-[10px] font-bold px-2 py-0.5 text-center truncate">
+                        Stok: <?php echo e($item->stok); ?> Pcs
+                    </div>
+                </div>
+
+                <!-- Product Content -->
+                <div class="p-3">
+                    <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider block mb-1">
+                        Kategori: <?php echo e($item->kategori ?? 'Umum'); ?>
+
+                    </span>
+                    <h3 class="font-bold text-gray-800 text-xs sm:text-sm line-clamp-2 min-h-[32px]" title="<?php echo e($item->nama_barang); ?>">
+                        <?php echo e($item->nama_barang); ?>
+
+                    </h3>
+
+                    <!-- Price -->
+                    <div class="mt-2">
+                        <span class="text-xs text-gray-400 block text-[10px]">Harga UEC</span>
+                        <span class="text-brand-red font-extrabold text-sm sm:text-base">
+                            Rp <?php echo e(number_format($item->harga, 0, ',', '.')); ?>
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Bottom Button -->
+            <div class="p-3 pt-0">
+                <button onclick="editBarang(<?php echo e(json_encode($item)); ?>)" class="w-full bg-brand-blue hover:bg-brand-navy text-white font-bold py-1.5 px-2 rounded-lg text-xs flex items-center justify-center space-x-1 shadow-sm transition">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Edit Data</span>
+                </button>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+        <div class="col-span-full bg-white rounded-xl p-8 text-center border border-dashed border-gray-300">
+            <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-2"></i>
+            <p class="text-gray-500 font-medium">Belum ada barang terdaftar.</p>
+            <button onclick="openModal('createModal')" class="mt-3 bg-brand-blue text-white text-xs px-4 py-2 rounded-lg hover:bg-brand-navy">
+                + Tambah Barang Pertama
+            </button>
+        </div>
+    <?php endif; ?>
+</div>
+
+
+<!-- Modal Create Barang -->
+<div id="createModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl transform transition-all">
+        <div class="bg-brand-blue text-white px-6 py-4 flex items-center justify-between">
+            <h3 class="font-bold text-base flex items-center">
+                <i class="fa-solid fa-circle-plus mr-2"></i> Tambah Barang Baru
+            </h3>
+            <button onclick="closeModal('createModal')" class="text-white/80 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <form action="<?php echo e(route('barang.store')); ?>" method="POST" class="p-6 space-y-4">
+            <?php echo csrf_field(); ?>
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Barang</label>
+                <input type="text" name="nama_barang" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="Contoh: Indomie Goreng 85g">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kategori</label>
+                <input type="text" name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="Contoh: Makanan / Minuman">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Harga (Rp)</label>
+                    <input type="number" name="harga" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="3500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Stok Pcs</label>
+                    <input type="number" name="stok" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="10">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-4 border-t">
+                <button type="button" onclick="closeModal('createModal')" class="px-4 py-2 border text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-100">Batal</button>
+                <button type="submit" class="px-4 py-2 bg-brand-blue text-white rounded-lg text-xs font-bold hover:bg-brand-navy shadow">Simpan Barang</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal Edit Barang -->
+<div id="editModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl transform transition-all">
+        <div class="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
+            <h3 class="font-bold text-base flex items-center">
+                <i class="fa-solid fa-pen-to-square mr-2"></i> Edit Data Barang
+            </h3>
+            <button onclick="closeModal('editModal')" class="text-white/80 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <form id="editForm" method="POST" class="p-6 space-y-4">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
+            
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Barang</label>
+                <input type="text" id="edit_nama_barang" name="nama_barang" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kategori</label>
+                <input type="text" id="edit_kategori" name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Harga (Rp)</label>
+                    <input type="number" id="edit_harga" name="harga" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Stok Pcs</label>
+                    <input type="number" id="edit_stok" name="stok" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-4 border-t">
+                <button type="button" onclick="closeModal('editModal')" class="px-4 py-2 border text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-100">Batal</button>
+                <button type="submit" class="px-4 py-2 bg-brand-yellow text-brand-navy rounded-lg text-xs font-bold hover:bg-yellow-400 shadow">Update Barang</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+    function editBarang(item) {
+        document.getElementById('edit_nama_barang').value = item.nama_barang;
+        document.getElementById('edit_kategori').value = item.kategori ?? '';
+        document.getElementById('edit_harga').value = item.harga;
+        document.getElementById('edit_stok').value = item.stok;
+        
+        // Update URL form action
+        document.getElementById('editForm').action = `/barang/${item.id}`;
+        
+        openModal('editModal');
+    }
+</script>
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/syafiqakmal/Downloads/belajar-laravel/resources/views/barang/index.blade.php ENDPATH**/ ?>
