@@ -48,12 +48,16 @@
             </div>
 
             <div>
-                <!-- Product Image Header Placeholder -->
-                <div class="h-36 bg-gray-50 flex items-center justify-center p-3 relative border-b border-gray-100">
-                    <i class="fa-solid fa-box text-5xl text-gray-300"></i>
+                <!-- Product Image Header -->
+                <div class="h-36 bg-gray-50 flex items-center justify-center p-2 relative border-b border-gray-100 overflow-hidden">
+                    @if($item->gambar)
+                        <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama_barang }}" class="w-full h-full object-cover">
+                    @else
+                        <i class="fa-solid fa-box text-5xl text-gray-300"></i>
+                    @endif
 
                     <!-- Strip Label Kuning (Indomaret Style) -->
-                    <div class="absolute bottom-0 left-0 right-0 bg-brand-yellow text-brand-navy text-[10px] font-bold px-2 py-0.5 text-center truncate">
+                    <div class="absolute bottom-0 left-0 right-0 bg-brand-yellow text-brand-navy text-[10px] font-bold px-2 py-0.5 text-center truncate z-10">
                         Stok: {{ $item->stok }} Pcs
                     </div>
                 </div>
@@ -109,7 +113,7 @@
             </button>
         </div>
         
-        <form action="{{ route('barang.store') }}" method="POST" class="p-6 space-y-4">
+        <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
             @csrf
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Barang</label>
@@ -130,6 +134,11 @@
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Stok Pcs</label>
                     <input type="number" name="stok" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="10">
                 </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Foto Produk</label>
+                <input type="file" name="gambar" accept="image/*" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-brand-blue file:text-white hover:file:bg-brand-navy">
             </div>
 
             <div class="flex items-center justify-end space-x-2 pt-4 border-t">
@@ -153,7 +162,7 @@
             </button>
         </div>
         
-        <form id="editForm" method="POST" class="p-6 space-y-4">
+        <form id="editForm" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
             @csrf
             @method('PUT')
             
@@ -176,6 +185,11 @@
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Stok Pcs</label>
                     <input type="number" id="edit_stok" name="stok" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
                 </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Ubah Foto Produk (Opsional)</label>
+                <input type="file" name="gambar" accept="image/*" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-brand-blue file:text-white hover:file:bg-brand-navy">
             </div>
 
             <div class="flex items-center justify-end space-x-2 pt-4 border-t">

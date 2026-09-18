@@ -24,23 +24,27 @@ class BarangController extends Controller
     }
 
     // 2. Menyimpan barang baru
-    public function store(Request $request)
+   public function store(Request $request)
 {
-    // 1. Validasi data input dari form modal
     $validated = $request->validate([
         'kode_barang' => 'nullable|string|max:50|unique:barang,kode_barang',
         'nama_barang' => 'required|string|max:255',
         'kategori'    => 'required|string|max:100',
         'harga'       => 'required|numeric|min:0',
         'stok'        => 'required|integer|min:0',
+        'gambar'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
     ]);
 
-    // 2. Jika kode_barang tidak diisi di form, sistem akan membuatkan kode otomatis
     if (empty($validated['kode_barang'])) {
         $validated['kode_barang'] = 'BRG-' . time();
     }
 
-    // 3. Simpan data yang sudah valid dan lengkap ke database
+    // Proses upload gambar jika ada
+    if ($request->hasFile('gambar')) {
+        $path = $request->file('gambar')->store('produk', 'public');
+        $validated['gambar'] = $path;
+    }
+
     Barang::create($validated);
 
     return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan!');
