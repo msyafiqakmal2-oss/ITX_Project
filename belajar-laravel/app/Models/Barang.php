@@ -18,5 +18,6 @@ class Barang extends Model
         'kategori',
         'harga',
         'stok',
+        'gambar',
     ];
 }
