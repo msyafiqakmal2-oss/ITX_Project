@@ -19,10 +19,36 @@
     </div>
 </div>
 
-<!-- Category Filters -->
+<!-- Tab Navigasi Kategori -->
+<div class="mb-6 overflow-x-auto pb-2">
+    <div class="flex items-center space-x-2 min-w-max">
+        @php
+            $currentKategori = request('kategori');$categories = [
+                'Semua' => ['icon' => 'fa-boxes-stacked', 'val' => ''],
+                'Makanan' => ['icon' => 'fa-bowl-food', 'val' => 'Makanan'],
+                'Minuman' => ['icon' => 'fa-wine-glass', 'val' => 'Minuman'],
+                'Perlengkapan' => ['icon' => 'fa-pump-soap', 'val' => 'Perlengkapan'],
+                'Alat Tulis' => ['icon' => 'fa-pen-ruler', 'val' => 'Alat Tulis'],
+                'Kebutuhan' => ['icon' => 'fa-basket-shopping', 'val' => 'Kebutuhan'],
+            ];
+        @endphp
+
+        @foreach($categories as $label =>$cat)
+            @php $isActive = $currentKategori ==$cat['val']; @endphp
+            <a href="{{ route('barang.index', array_merge(request()->query(), ['kategori' => $cat['val']])) }}" 
+               class="flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm border {{ $isActive ? 'bg-brand-blue text-white border-brand-blue shadow-blue-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50' }}">
+                <i class="fa-solid {{ $cat['icon'] }}"></i>
+                <span>{{ $label }}</span>
+            </a>
+        @endforeach
+    </div>
+</div>
+
+<!-- Category Headers Info -->
 <div class="flex items-center justify-between mb-4">
     <h2 class="text-xl font-bold text-gray-800 flex items-center">
-        <i class="fa-solid fa-fire text-brand-red mr-2"></i> Daftar Produk Tersedia
+        <i class="fa-solid fa-fire text-brand-red mr-2"></i> 
+        {{ request('kategori') ? 'Kategori: ' . request('kategori') : 'Daftar Produk Tersedia' }}
     </h2>
     <span class="text-xs text-gray-500 font-medium">Menampilkan {{ $barangs->count() }} barang</span>
 </div>
@@ -56,7 +82,7 @@
                         <i class="fa-solid fa-box text-5xl text-gray-300"></i>
                     @endif
 
-                    <!-- Strip Label Kuning (Indomaret Style) -->
+                    <!-- Strip Label Kuning -->
                     <div class="absolute bottom-0 left-0 right-0 bg-brand-yellow text-brand-navy text-[10px] font-bold px-2 py-0.5 text-center truncate z-10">
                         Stok: {{ $item->stok }} Pcs
                     </div>
@@ -92,7 +118,7 @@
     @empty
         <div class="col-span-full bg-white rounded-xl p-8 text-center border border-dashed border-gray-300">
             <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-2"></i>
-            <p class="text-gray-500 font-medium">Belum ada barang terdaftar.</p>
+            <p class="text-gray-500 font-medium">Belum ada barang terdaftar pada kategori ini.</p>
             <button onclick="openModal('createModal')" class="mt-3 bg-brand-blue text-white text-xs px-4 py-2 rounded-lg hover:bg-brand-navy">
                 + Tambah Barang Pertama
             </button>
@@ -122,7 +148,14 @@
 
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kategori</label>
-                <input type="text" name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="Contoh: Makanan / Minuman">
+                <select name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="Makanan">Makanan</option>
+                    <option value="Minuman">Minuman</option>
+                    <option value="Perlengkapan">Perlengkapan</option>
+                    <option value="Alat Tulis">Alat Tulis</option>
+                    <option value="Kebutuhan">Kebutuhan</option>
+                </select>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -173,7 +206,14 @@
 
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kategori</label>
-                <input type="text" id="edit_kategori" name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                <select id="edit_kategori" name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="Makanan">Makanan</option>
+                    <option value="Minuman">Minuman</option>
+                    <option value="Perlengkapan">Perlengkapan</option>
+                    <option value="Alat Tulis">Alat Tulis</option>
+                    <option value="Kebutuhan">Kebutuhan</option>
+                </select>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
