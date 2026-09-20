@@ -100,37 +100,69 @@
             </div>
         </div>
 
-        <!-- Section 4: Mengapa Memilih UEC MART? -->
-        <div class="text-center space-y-8">
-            <div>
-                <h2 class="text-2xl font-black text-gray-800">Mengapa Memilih UEC MART?</h2>
-                <p class="text-xs text-gray-500 mt-1">Keunggulan layanan yang selalu kami jaga untuk kenyamanan Anda</p>
+<!-- Section 4: Mengapa Memilih UEC MART? -->
+<div class="text-center space-y-8">
+    <div>
+        <h2 class="text-2xl font-black text-gray-800">Mengapa Memilih UEC MART?</h2>
+        <p class="text-xs text-gray-500 mt-1">Keunggulan layanan yang selalu kami jaga untuk kenyamanan Anda</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Kartu 1: Produk Halal & Thayyib (Warna Biru) -->
+        <div class="group relative bg-white p-6 rounded-2xl border border-gray-100 shadow-sm 
+                    hover:-translate-y-2 hover:shadow-xl transition-all duration-300 ease-out 
+                    overflow-hidden cursor-pointer">
+            <!-- Aksen Garis Warna Atas -->
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-80 group-hover:h-2 transition-all duration-300"></div>
+            <!-- Glow Effect di Background saat Hover -->
+            <div class="absolute -right-10 -bottom-10 w-28 h-28 bg-blue-100/50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+
+            <div class="relative z-10 space-y-3">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto text-xl font-bold 
+                            group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">Produk Halal & Thayyib</h3>
+                <p class="text-xs text-gray-500 leading-relaxed">Seluruh barang yang dijual terjamin kehalalan dan kebersihannya sesuai kaidah syariat.</p>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition text-center space-y-3">
-                    <div class="w-12 h-12 bg-blue-100 text-brand-blue rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-sm">Produk Halal & Thayyib</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed">Seluruh barang yang dijual terjamin kehalalan dan kebersihannya sesuai kaidah syariat.</p>
-                </div>
+        <!-- Kartu 2: Pembayaran Digital Lengkap (Warna Kuning/Amber) -->
+        <div class="group relative bg-white p-6 rounded-2xl border border-gray-100 shadow-sm 
+                    hover:-translate-y-2 hover:shadow-xl transition-all duration-300 ease-out 
+                    overflow-hidden cursor-pointer">
+            <!-- Aksen Garis Warna Atas -->
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-400 to-orange-500 opacity-80 group-hover:h-2 transition-all duration-300"></div>
+            <!-- Glow Effect di Background saat Hover -->
+            <div class="absolute -right-10 -bottom-10 w-28 h-28 bg-amber-100/50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
 
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition text-center space-y-3">
-                    <div class="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-                        <i class="fa-solid fa-qrcode"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-sm">Pembayaran Digital Lengkap</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed">Mendukung pembayaran instan QRIS, E-Wallet (GoPay, OVO, DANA), hingga Transfer Bank.</p>
+            <div class="relative z-10 space-y-3">
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-xl font-bold 
+                            group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 shadow-sm">
+                    <i class="fa-solid fa-qrcode"></i>
                 </div>
+                <h3 class="font-bold text-gray-800 text-sm group-hover:text-amber-600 transition-colors">Pembayaran Digital Lengkap</h3>
+                <p class="text-xs text-gray-500 leading-relaxed">Mendukung pembayaran instan QRIS, E-Wallet (GoPay, OVO, DANA), hingga Transfer Bank.</p>
+            </div>
+        </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition text-center space-y-3">
-                    <div class="w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-sm">Dukungan Entrepreneurship</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed">Setiap transaksi Anda berpartisipasi langsung dalam mendukung program wirausaha mahasiswa UNIDA Gontor.</p>
+        <!-- Kartu 3: Dukungan Entrepreneurship (Warna Hijau) -->
+        <div class="group relative bg-white p-6 rounded-2xl border border-gray-100 shadow-sm 
+                    hover:-translate-y-2 hover:shadow-xl transition-all duration-300 ease-out 
+                    overflow-hidden cursor-pointer">
+            <!-- Aksen Garis Warna Atas -->
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 to-green-600 opacity-80 group-hover:h-2 transition-all duration-300"></div>
+            <!-- Glow Effect di Background saat Hover -->
+            <div class="absolute -right-10 -bottom-10 w-28 h-28 bg-emerald-100/50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+
+            <div class="relative z-10 space-y-3">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-xl font-bold 
+                            group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                    <i class="fa-solid fa-graduation-cap"></i>
                 </div>
+                <h3 class="font-bold text-gray-800 text-sm group-hover:text-emerald-600 transition-colors">Dukungan Entrepreneurship</h3>
+                <p class="text-xs text-gray-500 leading-relaxed">Setiap transaksi Anda berpartisipasi langsung dalam mendukung program wirausaha mahasiswa UNIDA Gontor.</p>
             </div>
         </div>
 
