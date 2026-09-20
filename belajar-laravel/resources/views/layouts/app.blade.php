@@ -44,7 +44,7 @@
                     <span>Download App UEC MART Mobile di PlayStore</span>
                 </div>
                 <div class="hidden sm:flex items-center space-x-4">
-                    <a href="#" class="hover:underline">Tentang UEC MART</a>
+                    <a href="{{ route('tentang') }}" class="hover:text-yellow-300 transition">Tentang UEC MART</a>
                     <a href="#" class="hover:underline">Produk Terlaris</a>
                     <a href="#" class="hover:underline">Promo Spesial</a>
                 </div>

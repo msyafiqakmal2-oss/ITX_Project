@@ -8,7 +8,9 @@ use App\Http\Controllers\TransaksiController;
 Route::get('/', function () {
     return redirect()->route('barang.index');
 });
-
+Route::get('/tentang', function () {
+    return view('tentang');
+})->name('tentang');
 // Menyiapkan seluruh route resource untuk Barang (index, store, update, destroy, dll)
 Route::resource('barang', BarangController::class);
 Route::get('/checkout', [TransaksiController::class, 'index'])->name('transaksi.checkout');
