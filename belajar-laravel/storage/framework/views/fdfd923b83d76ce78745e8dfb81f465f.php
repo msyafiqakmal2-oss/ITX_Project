@@ -15,7 +15,7 @@
         </a>
     </div>
 
-    <form action="<?php echo e(route('transaksi.process')); ?>" method="POST">
+    <form id="checkoutForm" onsubmit="handleCheckout(event)">
         <?php echo csrf_field(); ?>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
@@ -30,11 +30,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Lengkap</label>
-                            <input type="text" name="nama_pembeli" required placeholder="Contoh: Syafiq Akmal" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                            <input type="text" id="nama_pembeli" required placeholder="Contoh: Syafiq Akmal" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nomor WhatsApp</label>
-                            <input type="tel" name="no_hp" placeholder="Contoh: 08123456789" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                            <input type="tel" id="no_hp" required placeholder="Contoh: 08123456789" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
                         </div>
                     </div>
                 </div>
@@ -45,12 +45,12 @@
                         <i class="fa-solid fa-wallet text-brand-blue"></i> Pilih Metode Pembayaran
                     </h2>
 
-                    <input type="hidden" name="metode_pembayaran" id="selected_metode" value="qris" required>
+                    <input type="hidden" id="selected_metode" value="qris">
 
                     <!-- Option 1: QRIS Instant -->
                     <div class="mb-4">
                         <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Instan QRIS</span>
-                        <label onclick="selectPayment('qris')" id="pay-qris" class="payment-option flex items-center justify-between p-3.5 border-2 border-brand-blue bg-blue-50/50 rounded-xl cursor-pointer transition">
+                        <label onclick="selectPayment('qris', 'QRIS All Payment')" id="pay-qris" class="payment-option flex items-center justify-between p-3.5 border-2 border-brand-blue bg-blue-50/50 rounded-xl cursor-pointer transition">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center border shadow-sm">
                                     <i class="fa-solid fa-qrcode text-brand-blue text-xl"></i>
@@ -68,19 +68,19 @@
                     <div class="mb-4">
                         <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">E-Wallet</span>
                         <div class="grid grid-cols-2 gap-3">
-                            <label onclick="selectPayment('gopay')" id="pay-gopay" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
+                            <label onclick="selectPayment('gopay', 'GoPay')" id="pay-gopay" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
                                 <span class="font-bold text-xs text-gray-700">GoPay</span>
                                 <i class="fa-solid fa-circle text-gray-300 text-sm payment-icon"></i>
                             </label>
-                            <label onclick="selectPayment('shopeepay')" id="pay-shopeepay" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
+                            <label onclick="selectPayment('shopeepay', 'ShopeePay')" id="pay-shopeepay" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
                                 <span class="font-bold text-xs text-gray-700">ShopeePay</span>
                                 <i class="fa-solid fa-circle text-gray-300 text-sm payment-icon"></i>
                             </label>
-                            <label onclick="selectPayment('dana')" id="pay-dana" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
+                            <label onclick="selectPayment('dana', 'DANA')" id="pay-dana" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
                                 <span class="font-bold text-xs text-gray-700">DANA</span>
                                 <i class="fa-solid fa-circle text-gray-300 text-sm payment-icon"></i>
                             </label>
-                            <label onclick="selectPayment('ovo')" id="pay-ovo" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
+                            <label onclick="selectPayment('ovo', 'OVO')" id="pay-ovo" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
                                 <span class="font-bold text-xs text-gray-700">OVO</span>
                                 <i class="fa-solid fa-circle text-gray-300 text-sm payment-icon"></i>
                             </label>
@@ -91,15 +91,15 @@
                     <div>
                         <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Transfer Bank (VA)</span>
                         <div class="space-y-2">
-                            <label onclick="selectPayment('bca')" id="pay-bca" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
+                            <label onclick="selectPayment('bca', 'BCA Virtual Account')" id="pay-bca" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
                                 <span class="font-bold text-xs text-gray-700">BCA Virtual Account</span>
                                 <i class="fa-solid fa-circle text-gray-300 text-sm payment-icon"></i>
                             </label>
-                            <label onclick="selectPayment('mandiri')" id="pay-mandiri" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
+                            <label onclick="selectPayment('mandiri', 'Mandiri Virtual Account')" id="pay-mandiri" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
                                 <span class="font-bold text-xs text-gray-700">Bank Mandiri Livin'</span>
                                 <i class="fa-solid fa-circle text-gray-300 text-sm payment-icon"></i>
                             </label>
-                            <label onclick="selectPayment('bri')" id="pay-bri" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
+                            <label onclick="selectPayment('bri', 'BRI Virtual Account')" id="pay-bri" class="payment-option flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue transition">
                                 <span class="font-bold text-xs text-gray-700">BRI BRIMO</span>
                                 <i class="fa-solid fa-circle text-gray-300 text-sm payment-icon"></i>
                             </label>
@@ -150,9 +150,150 @@
     </form>
 </div>
 
+<!-- ================= MODAL PEMBAYARAN E-WALLET ================= -->
+<div id="ewalletModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl p-6">
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-brand-blue"></i> Pembayaran <span id="ewalletTitle">E-Wallet</span>
+            </h3>
+            <button onclick="closeModal('ewalletModal')" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <form onsubmit="processEwalletPay(event)" class="space-y-4">
+            <div class="bg-blue-50 p-3 rounded-xl flex justify-between items-center text-xs">
+                <span class="text-gray-600">Total Tagihan:</span>
+                <span id="ewalletTotal" class="font-extrabold text-brand-red text-sm">Rp 0</span>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nomor Akun / HP E-Wallet</label>
+                <input type="tel" id="ewallet_phone" required placeholder="08xxxxxxxxxx" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">PIN / Password Security</label>
+                <input type="password" maxlength="6" id="ewallet_pin" required placeholder="******" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none tracking-widest text-center text-lg">
+            </div>
+
+            <button type="submit" id="btnPayEwallet" class="w-full bg-brand-blue hover:bg-brand-navy text-white font-bold py-3 rounded-xl text-sm shadow transition">
+                Konfirmasi & Bayar Sekarang
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ================= MODAL PEMBAYARAN QRIS ================= -->
+<div id="qrisModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-2xl p-6 text-center">
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+            <h3 class="font-bold text-gray-800 text-sm">Scan QRIS UEC MART</h3>
+            <button onclick="closeModal('qrisModal')" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <p class="text-xs text-gray-500 mb-2">Buka Aplikasi GoPay, Shopee, DANA, OVO, atau Mobile Banking Anda lalu Scan di bawah ini:</p>
+
+        <!-- Logo QRIS & QR Code Generator -->
+        <div class="bg-gray-50 border-2 border-dashed border-gray-300 p-4 rounded-2xl my-3 inline-block relative">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=UECMART-PAYMENT" alt="QRIS Code" class="mx-auto rounded-lg shadow-sm">
+            <div class="mt-2 flex items-center justify-center gap-1">
+                <span class="font-black text-xs text-red-600">QRIS</span>
+                <span class="text-[9px] text-gray-400">GPN Approved</span>
+            </div>
+        </div>
+
+        <div class="bg-yellow-50 text-yellow-800 text-xs p-2.5 rounded-xl mb-4 font-semibold">
+            Total: <span id="qrisTotal" class="font-bold text-brand-red">Rp 0</span>
+        </div>
+
+        <button onclick="simulasiQrisSukses()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-xs shadow transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Simulasi Scan & Bayar Sukses</span>
+        </button>
+    </div>
+</div>
+
+<!-- ================= MODAL PEMBAYARAN VIRTUAL ACCOUNT ================= -->
+<div id="vaModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl p-6">
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+            <h3 class="font-bold text-gray-800 text-base">Transfer Virtual Account</h3>
+            <button onclick="closeModal('vaModal')" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div class="space-y-4">
+            <div class="bg-gray-50 p-3 rounded-xl border text-center">
+                <p class="text-xs text-gray-500 mb-1">Nomor Virtual Account <span id="vaBankName" class="font-bold">BCA</span>:</p>
+                <div class="flex items-center justify-center gap-2">
+                    <span id="vaNumber" class="text-lg font-black tracking-widest text-brand-navy">88012839201923</span>
+                    <button onclick="copyVA()" class="text-xs bg-blue-100 text-brand-blue font-bold px-2 py-1 rounded">Salin</button>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-3 rounded-xl flex justify-between items-center text-xs">
+                <span class="text-gray-600">Total Pembayaran:</span>
+                <span id="vaTotal" class="font-extrabold text-brand-red text-sm">Rp 0</span>
+            </div>
+
+            <button onclick="simulasiVASukses()" class="w-full bg-brand-blue hover:bg-brand-navy text-white font-bold py-3 rounded-xl text-sm shadow transition">
+                Saya Sudah Transfer
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL TANDA VERIFIKASI / STRUK SUKSES ================= -->
+<div id="successModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl p-6 text-center transform transition-all scale-100">
+        
+        <!-- Animated Check Icon -->
+        <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-200">
+            <i class="fa-solid fa-check text-4xl"></i>
+        </div>
+
+        <h2 class="text-xl font-black text-gray-800 mb-1">Pembayaran Berhasil!</h2>
+        <p class="text-xs text-gray-500 mb-4">Transaksi Anda telah terverifikasi oleh sistem UEC MART.</p>
+
+        <!-- Struk Ringkas -->
+        <div class="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-4 text-left space-y-2 mb-6">
+            <div class="flex justify-between text-xs text-gray-500">
+                <span>No. Transaksi</span>
+                <span id="successTrxId" class="font-mono font-bold text-gray-700">#UEC-89213</span>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500">
+                <span>Nama Pemesan</span>
+                <span id="successName" class="font-bold text-gray-700">-</span>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500">
+                <span>Metode Pembayaran</span>
+                <span id="successMethod" class="font-bold text-gray-700">-</span>
+            </div>
+            <div class="border-t border-dashed pt-2 flex justify-between text-xs font-bold text-gray-800">
+                <span>Total Lunas</span>
+                <span id="successTotal" class="text-brand-red font-black">Rp 0</span>
+            </div>
+        </div>
+
+        <a href="<?php echo e(route('barang.index')); ?>" onclick="clearCartAndFinish()" class="w-full block bg-brand-blue hover:bg-brand-navy text-white font-bold py-3 rounded-xl text-sm shadow-lg transition">
+            Kembali ke Katalog Belanja
+        </a>
+    </div>
+</div>
+
 <script>
+    let cart = [];
+    let selectedPaymentMethod = 'qris';
+    let selectedPaymentLabel = 'QRIS All Payment';
+    let grandTotal = 0;
+
     document.addEventListener('DOMContentLoaded', function() {
-        let cart = JSON.parse(localStorage.getItem('uec_cart')) || [];
+        cart = JSON.parse(localStorage.getItem('uec_cart')) || [];
         let listContainer = document.getElementById('checkoutItemsList');
         let subtotalEl = document.getElementById('checkoutSubtotal');
         let totalEl = document.getElementById('checkoutTotal');
@@ -162,7 +303,7 @@
             return;
         }
 
-        let totalPrice = cart.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+        grandTotal = cart.reduce((sum, item) => sum + (item.harga * item.qty), 0);
 
         listContainer.innerHTML = cart.map(item => `
             <div class="flex items-center justify-between text-xs border-b pb-2">
@@ -174,12 +315,14 @@
             </div>
         `).join('');
 
-        let formattedTotal = 'Rp ' + totalPrice.toLocaleString('id-ID');
+        let formattedTotal = 'Rp ' + grandTotal.toLocaleString('id-ID');
         subtotalEl.innerText = formattedTotal;
         totalEl.innerText = formattedTotal;
     });
 
-    function selectPayment(id) {
+    function selectPayment(id, label) {
+        selectedPaymentMethod = id;
+        selectedPaymentLabel = label;
         document.getElementById('selected_metode').value = id;
         
         document.querySelectorAll('.payment-option').forEach(el => {
@@ -200,6 +343,93 @@
                 icon.className = 'fa-solid fa-circle-check text-brand-blue text-lg payment-icon';
             }
         }
+    }
+
+    // HANDLER SAAT TOMBOL "BAYAR SEKARANG" DIKLIK
+    function handleCheckout(e) {
+        e.preventDefault();
+        if (cart.length === 0) return alert('Keranjang belanja kosong!');
+
+        const nama = document.getElementById('nama_pembeli').value;
+        const phone = document.getElementById('no_hp').value;
+
+        if(!nama || !phone) return alert('Harap isi Nama Pemesan dan Nomor WhatsApp terlebih dahulu!');
+
+        let formattedTotal = 'Rp ' + grandTotal.toLocaleString('id-ID');
+
+        // Buka modal sesuai metode pembayaran yang dipilih
+        if (['gopay', 'shopeepay', 'dana', 'ovo'].includes(selectedPaymentMethod)) {
+            document.getElementById('ewalletTitle').innerText = selectedPaymentLabel;
+            document.getElementById('ewalletTotal').innerText = formattedTotal;
+            document.getElementById('ewallet_phone').value = phone;
+            openModal('ewalletModal');
+        } else if (selectedPaymentMethod === 'qris') {
+            document.getElementById('qrisTotal').innerText = formattedTotal;
+            openModal('qrisModal');
+        } else {
+            document.getElementById('vaBankName').innerText = selectedPaymentLabel;
+            document.getElementById('vaTotal').innerText = formattedTotal;
+            document.getElementById('vaNumber').innerText = '8801' + Math.floor(1000000000 + Math.random() * 9000000000);
+            openModal('vaModal');
+        }
+    }
+
+    // PROSES BAYAR E-WALLET (SIMULASI MASUKKAN PIN)
+    function processEwalletPay(e) {
+        e.preventDefault();
+        let btn = document.getElementById('btnPayEwallet');
+        btn.innerText = 'Memproses Pembayaran...';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            closeModal('ewalletModal');
+            btn.innerText = 'Konfirmasi & Bayar Sekarang';
+            btn.disabled = false;
+            showSuccessModal();
+        }, 1500);
+    }
+
+    // SIMULASI PROSES QRIS SUKSES
+    function simulasiQrisSukses() {
+        closeModal('qrisModal');
+        showSuccessModal();
+    }
+
+    // SIMULASI PROSES VA SUKSES
+    function simulasiVASukses() {
+        closeModal('vaModal');
+        showSuccessModal();
+    }
+
+    // TAMPILKAN STRUK/VERIFIKASI BERHASIL
+    function showSuccessModal() {
+        let nama = document.getElementById('nama_pembeli').value;
+        let formattedTotal = 'Rp ' + grandTotal.toLocaleString('id-ID');
+        
+        document.getElementById('successTrxId').innerText = '#UEC-' + Math.floor(100000 + Math.random() * 900000);
+        document.getElementById('successName').innerText = nama;
+        document.getElementById('successMethod').innerText = selectedPaymentLabel;
+        document.getElementById('successTotal').innerText = formattedTotal;
+
+        openModal('successModal');
+    }
+
+    function clearCartAndFinish() {
+        localStorage.removeItem('uec_cart');
+    }
+
+    function copyVA() {
+        let vaNum = document.getElementById('vaNumber').innerText;
+        navigator.clipboard.writeText(vaNum);
+        alert('Nomor VA berhasil disalin!');
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
     }
 </script>
 <?php $__env->stopSection(); ?>
