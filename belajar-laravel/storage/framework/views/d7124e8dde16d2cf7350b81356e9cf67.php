@@ -25,7 +25,7 @@
             
             <!-- Foto Utama (Papan Nama UEC MART) -->
             <div class="relative w-full md:w-80 h-64 md:h-80 rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl flex-shrink-0">
-                <img src="<?php echo e(asset('images/uec-gedung.jpeg')); ?>" alt="Plang UEC Mart" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                <img src="<?php echo e(asset('images/uec-plang.jpeg')); ?>" alt="Plang UEC Mart" class="w-full h-full object-cover hover:scale-105 transition duration-500">
             </div>
         </div>
 
@@ -33,7 +33,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white p-6 md:p-8 rounded-3xl border border-gray-200 shadow-sm">
             <!-- Foto Gedung Depan -->
             <div class="rounded-2xl overflow-hidden shadow-md border border-gray-100 group">
-                <img src="<?php echo e(asset('images/uec-gedug.jpeg')); ?>" alt="Gedung UNIDA Edupreneur Center" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500">
+                <img src="<?php echo e(asset('images/uec-gedung.jpeg')); ?>" alt="Gedung UNIDA Edupreneur Center" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500">
                 <div class="p-3 bg-gray-50 text-center text-xs font-semibold text-gray-500">
                     <i class="fa-solid fa-location-dot text-brand-red mr-1"></i> Gedung UNIDA Edupreneur Center (UEC)
                 </div>
