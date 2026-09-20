@@ -58,9 +58,9 @@
     @forelse($barangs as $item)
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition flex flex-col justify-between overflow-hidden relative group">
             
-            <!-- Admin Actions (Akses Cepat Edit & Hapus untuk Admin) -->
+            <!-- Admin Actions (Edit & Hapus) -->
             <div class="absolute top-2 right-2 z-10 flex flex-col space-y-1 opacity-0 group-hover:opacity-100 transition">
-                <button onclick="editBarang({{ json_encode($item) }})" class="w-7 h-7 bg-white/90 hover:bg-brand-blue hover:text-white text-gray-600 rounded-full flex items-center justify-center shadow text-xs transition" title="Edit Master Data">
+                <button onclick="editBarang({{ json_encode($item) }})" class="w-7 h-7 bg-white/90 hover:bg-brand-blue hover:text-white text-gray-600 rounded-full flex items-center justify-center shadow text-xs transition" title="Edit Barang">
                     <i class="fa-solid fa-pen"></i>
                 </button>
                 
@@ -119,11 +119,14 @@
         <div class="col-span-full bg-white rounded-xl p-8 text-center border border-dashed border-gray-300">
             <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-2"></i>
             <p class="text-gray-500 font-medium">Belum ada barang terdaftar pada kategori ini.</p>
+            <button onclick="openModal('createModal')" class="mt-3 bg-brand-blue text-white text-xs px-4 py-2 rounded-lg hover:bg-brand-navy font-bold">
+                + Tambah Barang Pertama
+            </button>
         </div>
     @endforelse
 </div>
 
-<!-- FLOATING CART BAR (Bar Keranjang Melayang di Bawah) -->
+<!-- FLOATING CART BAR -->
 <div id="cartBar" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-4xl bg-brand-navy text-white rounded-2xl shadow-2xl p-4 flex items-center justify-between z-40 transition-all duration-300 transform translate-y-28 opacity-0">
     <div class="flex items-center space-x-4">
         <div class="relative bg-brand-yellow text-brand-navy p-3 rounded-xl">
@@ -137,7 +140,7 @@
     </div>
 
     <div class="flex items-center space-x-3">
-        <button onclick="openCartModal()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1">
+        <button onclick="openModal('cartModal')" class="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1">
             <i class="fa-solid fa-list-check"></i>
             <span class="hidden sm:inline">Rincian</span>
         </button>
@@ -148,7 +151,62 @@
     </div>
 </div>
 
-<!-- MODAL RINCIAN KERANJANG & PEMBAYARAN -->
+<!-- MODAL CREATE BARANG -->
+<div id="createModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl transform transition-all">
+        <div class="bg-brand-blue text-white px-6 py-4 flex items-center justify-between">
+            <h3 class="font-bold text-base flex items-center">
+                <i class="fa-solid fa-circle-plus mr-2"></i> Tambah Barang Baru
+            </h3>
+            <button onclick="closeModal('createModal')" class="text-white/80 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+            @csrf
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Barang</label>
+                <input type="text" name="nama_barang" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="Contoh: Indomie Goreng 85g">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Kategori</label>
+                <select name="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none">
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="Makanan">Makanan</option>
+                    <option value="Minuman">Minuman</option>
+                    <option value="Perlengkapan">Perlengkapan</option>
+                    <option value="Alat Tulis">Alat Tulis</option>
+                    <option value="Kebutuhan">Kebutuhan</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Harga (Rp)</label>
+                    <input type="number" name="harga" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="3500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Stok Pcs</label>
+                    <input type="number" name="stok" required min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none" placeholder="10">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Foto Produk</label>
+                <input type="file" name="gambar" accept="image/*" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-brand-blue file:text-white hover:file:bg-brand-navy">
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-4 border-t">
+                <button type="button" onclick="closeModal('createModal')" class="px-4 py-2 border text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-100">Batal</button>
+                <button type="submit" class="px-4 py-2 bg-brand-blue text-white rounded-lg text-xs font-bold hover:bg-brand-navy shadow">Simpan Barang</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL RINCIAN KERANJANG -->
 <div id="cartModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
         <div class="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
@@ -160,9 +218,7 @@
             </button>
         </div>
 
-        <div id="cartItemsList" class="p-6 overflow-y-auto space-y-3 flex-1">
-            <!-- Item keranjang diisi otomatis oleh JavaScript -->
-        </div>
+        <div id="cartItemsList" class="p-6 overflow-y-auto space-y-3 flex-1"></div>
 
         <div class="p-6 bg-gray-50 border-t space-y-3">
             <div class="flex justify-between text-sm font-bold text-gray-700">
@@ -181,12 +237,12 @@
     </div>
 </div>
 
-<!-- Modal Edit Barang Master (Akses Admin) -->
+<!-- MODAL EDIT BARANG MASTER -->
 <div id="editModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl transform transition-all">
         <div class="bg-brand-navy text-white px-6 py-4 flex items-center justify-between">
             <h3 class="font-bold text-base flex items-center">
-                <i class="fa-solid fa-pen-to-square mr-2"></i> Edit Data Barang (Master)
+                <i class="fa-solid fa-pen-to-square mr-2"></i> Edit Data Barang
             </h3>
             <button onclick="closeModal('editModal')" class="text-white/80 hover:text-white text-xl">
                 <i class="fa-solid fa-xmark"></i>
@@ -225,6 +281,11 @@
                 </div>
             </div>
 
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Ubah Foto Produk (Opsional)</label>
+                <input type="file" name="gambar" accept="image/*" class="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-blue focus:outline-none file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-brand-blue file:text-white hover:file:bg-brand-navy">
+            </div>
+
             <div class="flex items-center justify-end space-x-2 pt-4 border-t">
                 <button type="button" onclick="closeModal('editModal')" class="px-4 py-2 border text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-100">Batal</button>
                 <button type="submit" class="px-4 py-2 bg-brand-yellow text-brand-navy rounded-lg text-xs font-bold hover:bg-yellow-400 shadow">Update Barang</button>
@@ -237,6 +298,22 @@
 
 @push('scripts')
 <script>
+    // FUNGSI UMUM DUKUNGAN MODAL
+    function openModal(id) {
+        let target = document.getElementById(id);
+        if (target) {
+            target.classList.remove('hidden');
+        }
+    }
+
+    function closeModal(id) {
+        let target = document.getElementById(id);
+        if (target) {
+            target.classList.add('hidden');
+        }
+    }
+
+    // KERANJANG BELANJA LOGIC
     let cart = JSON.parse(localStorage.getItem('uec_cart')) || [];
 
     document.addEventListener('DOMContentLoaded', updateCartUI);
@@ -286,16 +363,21 @@
         let totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
         let totalPrice = cart.reduce((sum, item) => sum + (item.harga * item.qty), 0);
 
-        document.getElementById('cartCountBadge').innerText = totalItems;
-        document.getElementById('cartTotalPrice').innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
-
+        let badge = document.getElementById('cartCountBadge');
+        let totalText = document.getElementById('cartTotalPrice');
         let cartBar = document.getElementById('cartBar');
-        if (totalItems > 0) {
-            cartBar.classList.remove('translate-y-28', 'opacity-0');
-            cartBar.classList.add('translate-y-0', 'opacity-100');
-        } else {
-            cartBar.classList.remove('translate-y-0', 'opacity-100');
-            cartBar.classList.add('translate-y-28', 'opacity-0');
+
+        if (badge) badge.innerText = totalItems;
+        if (totalText) totalText.innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
+
+        if (cartBar) {
+            if (totalItems > 0) {
+                cartBar.classList.remove('translate-y-28', 'opacity-0');
+                cartBar.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                cartBar.classList.remove('translate-y-0', 'opacity-100');
+                cartBar.classList.add('translate-y-28', 'opacity-0');
+            }
         }
 
         renderCartModalItems(totalItems, totalPrice);
@@ -303,8 +385,13 @@
 
     function renderCartModalItems(totalItems, totalPrice) {
         let container = document.getElementById('cartItemsList');
-        document.getElementById('modalTotalItems').innerText = totalItems + ' Pcs';
-        document.getElementById('modalTotalPrice').innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
+        let modalTotalItems = document.getElementById('modalTotalItems');
+        let modalTotalPrice = document.getElementById('modalTotalPrice');
+
+        if (modalTotalItems) modalTotalItems.innerText = totalItems + ' Pcs';
+        if (modalTotalPrice) modalTotalPrice.innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
+
+        if (!container) return;
 
         if (cart.length === 0) {
             container.innerHTML = `
@@ -335,17 +422,10 @@
         `).join('');
     }
 
-    function openCartModal() {
-        document.getElementById('cartModal').classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
-    }
-
+    // REDIRECT KE HALAMAN CHECKOUT BARU
     function checkout() {
         if(cart.length === 0) return alert('Keranjang belanja kosong!');
-        alert('Fitur Pembayaran Kasir UEC MART siap dilanjutkan!');
+        window.location.href = "{{ route('transaksi.checkout') }}";
     }
 
     function editBarang(item) {
@@ -354,7 +434,7 @@
         document.getElementById('edit_harga').value = item.harga;
         document.getElementById('edit_stok').value = item.stok;
         document.getElementById('editForm').action = `/barang/${item.id}`;
-        document.getElementById('editModal').classList.remove('hidden');
+        openModal('editModal');
     }
 </script>
 @endpush
