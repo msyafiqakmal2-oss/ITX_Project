@@ -77,7 +77,7 @@
                         Fasilitas Istimewa
                     </span>
                     <h2 class="text-2xl font-black text-gray-800">
-                        UEC Coffee & Corner Cafe
+                        Jahiz Coffee & Corner Cafe
                     </h2>
                     <p class="text-gray-600 text-sm leading-relaxed text-justify">
                         Nikmati racikan kopi terbaik, aneka minuman segar, serta suasana bersantai yang nyaman di area cafe UEC MART. Tempat yang ideal untuk berdiskusi, mengerjakan tugas kuliah, atau sekadar beristirahat sejenak di tengah kesibukan akademik kampus.
