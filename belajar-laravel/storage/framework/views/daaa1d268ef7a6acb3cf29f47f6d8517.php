@@ -78,10 +78,36 @@
                         <i class="fa-solid fa-boxes-stacked text-xl"></i>
                     </a>
                     
-                    <button onclick="openModal('createModal')" class="bg-brand-red hover:bg-red-700 text-white font-semibold text-sm px-4 py-2 rounded-lg flex items-center space-x-2 shadow hover:shadow-md transition">
+                    <button onclick="openModal('createModal')" class="bg-brand-red hover:bg-red-700 text-white font-semibold text-sm px-3 py-2 rounded-lg flex items-center space-x-2 shadow hover:shadow-md transition">
                         <i class="fa-solid fa-plus text-xs"></i>
                         <span class="hidden sm:inline">Tambah Barang</span>
                     </button>
+
+                    <!-- Tombol Masuk / Status User (DI SINI LOKASI BERSIHNYA) -->
+                    <?php if(auth()->guard()->guest()): ?>
+                        <a href="<?php echo e(route('login')); ?>" class="border-2 border-brand-blue text-brand-blue font-bold px-4 py-1.5 rounded-lg text-xs hover:bg-blue-50 transition">
+                            Masuk
+                        </a>
+                        <a href="#" class="bg-brand-blue text-white font-bold px-4 py-1.5 rounded-lg text-xs shadow hover:bg-brand-navy transition">
+                            Daftar
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if(auth()->guard()->check()): ?>
+                        <div class="flex items-center gap-2 border-l pl-3 ml-1 border-gray-300">
+                            <div class="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
+                                <i class="fa-solid fa-circle-user text-brand-blue text-base"></i>
+                                <span class="text-xs font-bold text-gray-800"><?php echo e(Auth::user()->name); ?></span>
+                            </div>
+
+                            <form method="POST" action="<?php echo e(route('logout')); ?>" class="inline">
+                                <?php echo csrf_field(); ?>
+                                <button type="submit" class="text-xs text-red-500 font-bold hover:underline ml-1">
+                                    Keluar
+                                </button>
+                            </form>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -102,7 +128,6 @@
 
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
-        <!-- Flash Message Notification -->
         <?php if(session('success')): ?>
             <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded-lg flex items-center justify-between shadow-sm">
                 <div class="flex items-center space-x-2">
