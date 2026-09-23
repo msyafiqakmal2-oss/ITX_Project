@@ -91,6 +91,7 @@
                         <a href="#" class="bg-brand-blue text-white font-bold px-4 py-1.5 rounded-lg text-xs shadow hover:bg-brand-navy transition">
                             Daftar
                         </a>
+                
                     <?php endif; ?>
 
                     <?php if(auth()->guard()->check()): ?>
